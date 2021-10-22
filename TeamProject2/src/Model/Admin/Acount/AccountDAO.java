@@ -41,6 +41,80 @@ public class AccountDAO {
 		return list;
 	}
 	
+	public List<AccountVO> DayList(){
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		List<AccountVO> list = new ArrayList<AccountVO>();
+		String sql = "select to_char(account_day,'yymmdd') from bc_account";
+		try {
+			conn = DBManager.getConnection();
+			pstmt = conn.prepareStatement(sql);
+			rs = pstmt.executeQuery();
+			while(rs.next()) {
+				AccountVO vo = new AccountVO();
+				vo.setAccount_day(rs.getString(1));
+				list.add(vo);
+			}
+		}catch(Exception e) {
+			e.printStackTrace();
+		}
+		return list;
+	}
+	
+	
+	public List<AccountVO> MonthList(){
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		List<AccountVO> list = new ArrayList<AccountVO>();
+		String sql = "select to_char(account_month,'yyyy/mm'), (cash_sales+card_sales), (order_fee+repair_fee+tuning_fee+maintain_fee)  from bc_account_m";
+		try {
+			conn = DBManager.getConnection();
+			pstmt = conn.prepareStatement(sql);
+			rs = pstmt.executeQuery();
+			while(rs.next()) {
+				AccountVO vo = new AccountVO();
+				vo.setAccount_day(rs.getString(1));
+				vo.setM_plus(rs.getInt(2));
+				vo.setM_minus(rs.getInt(3));
+				list.add(vo);
+			}
+		}catch(Exception e) {
+			e.printStackTrace();
+		}
+		return list;
+	}
+	
+	
+	public List<AccountVO> YearList(){
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		List<AccountVO> list = new ArrayList<AccountVO>();
+		String sql = "select to_char(account_year,'yyyy'), (cash_sales+card_sales), (order_fee+repair_fee+tuning_fee+maintain_fee)  from bc_account_y";
+		try {
+			conn = DBManager.getConnection();
+			pstmt = conn.prepareStatement(sql);
+			rs = pstmt.executeQuery();
+			while(rs.next()) {
+				AccountVO vo = new AccountVO();
+				vo.setAccount_day(rs.getString(1));
+				vo.setY_plus(rs.getInt(2));
+				vo.setY_minus(rs.getInt(3));
+				list.add(vo);
+			}
+		}catch(Exception e) {
+			e.printStackTrace();
+		}
+		return list;
+	}
+	
+
+	
+	
+	
+	
 	public int Startlist() {
 		Connection conn = null;
 		PreparedStatement pstmt = null;
@@ -61,6 +135,52 @@ public class AccountDAO {
 		}
 		return row;
 	}
+	
+	
+	public int StartMonth() {
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		int row = 0;
+		String query = "select count(*) from bc_account_m where to_char(account_month,'yyyy/mm') = to_char(sysdate,'yyyy/mm')";
+		try {
+			conn = DBManager.getConnection();
+			pstmt = conn.prepareStatement(query);
+			rs = pstmt.executeQuery();
+			if (rs.next()) {
+				row = rs.getInt(1);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			DBManager.close(conn, pstmt, rs);
+		}
+		return row;
+	}
+	
+	public int StartYear() {
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		int row = 0;
+		String query = "select count(*) from bc_account_y where to_char(account_year,'yyyy') = to_char(sysdate,'yyyy')";
+		try {
+			conn = DBManager.getConnection();
+			pstmt = conn.prepareStatement(query);
+			rs = pstmt.executeQuery();
+			if (rs.next()) {
+				row = rs.getInt(1);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			DBManager.close(conn, pstmt, rs);
+		}
+		return row;
+	}
+	
+	
+	
 	
 	
 	public int Startinsert(AccountVO vo) {
@@ -220,12 +340,20 @@ public class AccountDAO {
 	public int Totalinsert(AccountVO vo) {
 		Connection conn = null;
 		PreparedStatement pstmt = null;
+		PreparedStatement pstmt2 = null;
+		PreparedStatement pstmt3 = null;
 		ResultSet rs = null;
 		int row = 0;
+		int yow = 0;
+		int mow = 0;
 		String query = "update bc_account set order_fee = ?, repair_fee = ?, tuning_fee = ?, maintain = ?, cash_sales = ?, card_sales = ? acoount_total = ? where to_char(account_day,'yymmdd') = to_char(sysdate,'yymmdd')";
+		String query_m = "update bc_account_m set order_fee = order_fee+?, repair_fee = repair_fee+?, tuning_fee = tuning_fee+?, maintain = maintain+?, cash_sales = cash_sales+?, card_sales = card_sales+? acoount_total = acoount_total+? where to_char(account_day,'yyyy/mm') = to_char(sysdate,'yyyy/mm')";
+		String query_y = "update bc_account_y set order_fee = order_fee+?, repair_fee = repair_fee+?, tuning_fee = tuning_fee+?, maintain = maintain+?, cash_sales = cash_sales+?, card_sales = card_sales+? acoount_total = acoount_total+? where to_char(account_day,'yyyy') = to_char(sysdate,'yyyy')";
 		try {
 			conn = DBManager.getConnection();
 			pstmt = conn.prepareStatement(query);
+			pstmt2 = conn.prepareStatement(query_m);
+			pstmt3 = conn.prepareStatement(query_y);
 			
 			pstmt.setInt(1, vo.getOrder_fee());
 			pstmt.setInt(2, vo.getRepair_fee());
@@ -234,6 +362,27 @@ public class AccountDAO {
 			pstmt.setInt(5, vo.getCash_sales());
 			pstmt.setInt(6, vo.getCard_sales());
 			pstmt.setInt(7, vo.getAccount_total());
+			row = pstmt.executeUpdate();
+			mow = pstmt2.executeUpdate();
+			yow = pstmt3.executeUpdate();
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			DBManager.close(conn, pstmt, rs);
+		}
+		return row;
+		
+	}
+	public int insertMonth() {
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		int row = 0;
+		String query = "insert into bc_account_m(account_month) values(sysdate)";
+		try {
+			conn = DBManager.getConnection();
+			pstmt = conn.prepareStatement(query);
 			row = pstmt.executeUpdate();
 			
 		} catch (Exception e) {
@@ -244,6 +393,28 @@ public class AccountDAO {
 		return row;
 		
 	}
+	
+	public int insertYear() {
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		int row = 0;
+		String query = "insert into bc_account_y(account_year) values(sysdate)";
+		try {
+			conn = DBManager.getConnection();
+			pstmt = conn.prepareStatement(query);
+			row = pstmt.executeUpdate();
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			DBManager.close(conn, pstmt, rs);
+		}
+		return row;
+		
+	}
+	
+	
 	
 	public int StardDay() {
 		Connection conn = null;
@@ -311,5 +482,118 @@ public class AccountDAO {
 			e.printStackTrace();
 		}
 		return vo;
+	}
+	
+	public AccountVO totalsearch(String date) {
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		int row = 0;
+		AccountVO vo = new AccountVO();
+		String sql = "select * from bc_account where to_char(account_day,'yymmdd') = "+date;
+		try {
+			conn = DBManager.getConnection();
+			pstmt = conn.prepareStatement(sql);
+			rs = pstmt.executeQuery();
+			while(rs.next()) {
+				vo.setOrder_fee(rs.getInt("order_fee"));
+				vo.setRepair_fee(rs.getInt("repair_fee"));
+				vo.setTuning_fee(rs.getInt("tuning_fee"));
+				vo.setMaintain_fee(rs.getInt("maintain_fee"));
+				vo.setCash_sales(rs.getInt("cash_sales"));
+				vo.setCard_sales(rs.getInt("card_sales"));
+			}
+		}catch(Exception e) {
+			e.printStackTrace();
+		}
+		return vo;
+	}
+	
+	public List<AccountVO> totalmsearch() {
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		int row = 0;
+		List<AccountVO> list = new ArrayList<AccountVO>();
+		String sql = "select (cash_sales+card_sales),(order_fee+repair_fee+tuning_fee+maintain_fee) from bc_account_m ";
+		try {
+			conn = DBManager.getConnection();
+			pstmt = conn.prepareStatement(sql);
+			rs = pstmt.executeQuery();
+			while(rs.next()) {
+				AccountVO vo = new AccountVO();
+				vo.setM_plus(rs.getInt(1));
+				vo.setM_minus(rs.getInt(2));
+			}
+		}catch(Exception e) {
+			e.printStackTrace();
+		}
+		return list;
+	}
+	
+	public List<AccountVO> totalmsearch(String month) {
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		int row = 0;
+		List<AccountVO> list = new ArrayList<AccountVO>();
+		String sql = "select (cash_sales + card_sales), (order_fee + repair_fee + tuning_fee + maintain_fee) from bc_account_m where to_char(account_month,'yyyy/mm') = '"+month+"' order by to_char(account_month,'yyyymmdd') desc";
+		try {
+			conn = DBManager.getConnection();
+			pstmt = conn.prepareStatement(sql);
+			rs = pstmt.executeQuery();
+			while(rs.next()) {
+				AccountVO vo = new AccountVO();
+				vo.setM_plus(rs.getInt(1));
+				vo.setM_minus(rs.getInt(2));
+				list.add(vo);
+			}
+		}catch(Exception e) {
+			e.printStackTrace();
+		}
+		return list;
+	}
+	public List<AccountVO> totalysearch() {
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		int row = 0;
+		List<AccountVO> list = new ArrayList<AccountVO>();
+		String sql = "select (cash_sales + card_sales)- (order_fee + repair_fee + tuning_fee + maintain_fee) from bc_account_y order by to_char(account_year,'yyyymm') desc";
+		try {
+			conn = DBManager.getConnection();
+			pstmt = conn.prepareStatement(sql);
+			rs = pstmt.executeQuery();
+			while(rs.next()) {
+				AccountVO vo = new AccountVO();
+				vo.setY_plus(rs.getInt(1));
+				list.add(vo);
+			}
+		}catch(Exception e) {
+			e.printStackTrace();
+		}
+		return list;
+	}
+	
+	public List<AccountVO> totalysearch(String year) {
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		int row = 0;
+		List<AccountVO> list = new ArrayList<AccountVO>();
+		String sql = "select (cash_sales + card_sales)- (order_fee + repair_fee + tuning_fee + maintain_fee) from bc_account_y where to_char(account_year,'yyyy') = '"+year+"' order by to_char(account_year,'yyyymm') desc";
+		try {
+			conn = DBManager.getConnection();
+			pstmt = conn.prepareStatement(sql);
+			rs = pstmt.executeQuery();
+			while(rs.next()) {
+				AccountVO vo = new AccountVO();
+				vo.setY_plus(rs.getInt(1));
+				list.add(vo);
+			}
+		}catch(Exception e) {
+			e.printStackTrace();
+		}
+		return list;
 	}
 }

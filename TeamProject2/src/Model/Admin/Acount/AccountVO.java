@@ -93,10 +93,38 @@ public class AccountVO {
 	private int card_charge;
 	private int cash_charge;
 	
+	private int m_plus;
+	private int m_minus;
+	private int y_plus;
+	private int y_minus;
 	
 	
 	
 	
+	public int getM_plus() {
+		return m_plus;
+	}
+	public void setM_plus(int m_plus) {
+		this.m_plus = m_plus;
+	}
+	public int getM_minus() {
+		return m_minus;
+	}
+	public void setM_minus(int m_minus) {
+		this.m_minus = m_minus;
+	}
+	public int getY_plus() {
+		return y_plus;
+	}
+	public void setY_plus(int y_plus) {
+		this.y_plus = y_plus;
+	}
+	public int getY_minus() {
+		return y_minus;
+	}
+	public void setY_minus(int y_minus) {
+		this.y_minus = y_minus;
+	}
 	public int getOrder_fee() {
 		return order_fee;
 	}

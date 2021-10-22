@@ -93,6 +93,7 @@
 									<li><a href="/Admin/acount/day_acount_repair.do">수리비용등록</a></li>
 									<li><a href="/Admin/acount/day_acount_tuning.do">튜닝비용등록</a></li>
 									<li><a href="/Admin/acount/day_acount_total.do">일일정산</a></li>
+									<li><a href="/Admin/acount/day_graph.do">일 통계</a></li>
 									<li><a href="/Admin/acount/month_graph.jsp">월 통계</a></li>
 									<li><a href="/Admin/acount/year_graph.jsp">연 통계</a></li>
 								</ul>

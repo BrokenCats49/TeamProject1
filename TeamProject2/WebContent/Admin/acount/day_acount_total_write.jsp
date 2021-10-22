@@ -5,11 +5,6 @@
 <%
 	AccountDAO dao = AccountDAO.getInstance();
 AccountVO vo1 = new AccountVO();
-AccountVO vo2 = new AccountVO();
-AccountVO vo3 = new AccountVO();
-AccountVO vo4 = new AccountVO();
-AccountVO vo5 = new AccountVO();
-AccountVO vo6 = new AccountVO();
 
 vo1 = dao.totalsearch();
 

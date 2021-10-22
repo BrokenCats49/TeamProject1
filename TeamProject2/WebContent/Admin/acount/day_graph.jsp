@@ -1,5 +1,14 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+           <%@ page import="java.util.*, Model.Admin.Acount.*" %>
+           
+           <%@ taglib uri = "http://java.sun.com/jsp/jstl/core" prefix="c" %>
+    <%@ page import="java.text.SimpleDateFormat" %>
+<%
+AccountDAO dao = AccountDAO.getInstance();
+List<AccountVO> ls = new ArrayList<AccountVO>();
+ls = dao.DayList();
+%>
 
 <%@ include file="/include/header.jsp"%>
  <script src="/chart/Chart.min.js"></script>
@@ -16,15 +25,33 @@
 		<h2 class="sub-title">일일 매출 현황</h2>
 		<div class="sub-search">
 		</div>
+		<form name = "sel" method = "post" action="day_graph.do">
+		<select name = "date">
+		<%
+		for(int x=0;x<ls.size();x++){
+		%>
+		<option value = "<%=ls.get(x).getAccount_day() %>"><%=ls.get(x).getAccount_day() %></option>
+		<%
+		}
+		%>
+		</select>
+		
+		<input type = "button" value = "검색하기" onClick = "send()">
+		</form>
 	</div>
 	
 	<div id="container" style="width: 700px;height:480px;">
         <canvas id="canvas" ></canvas>
     </div>  
 	<script>
+		function send(){
+			sel.submit();
+		}
+	
+	
         var color = Chart.helpers.color;
         var ChartData = {            
-            labels: ['현금', '대여료', '카드' , '발주비용'], // 챠트의 항목명 설정
+            labels: ['현금', '카드', '수리' , '튜닝', '발주', '관리' ], // 챠트의 항목명 설정
             datasets: [{
                 label: '매출(흑자)',  // 데이터셑의 이름
                 pointRadius: 15, // 꼭지점의 원크기
@@ -34,7 +61,7 @@
                 borderWidth: 1, // 챠트의 테두리 굵기
                 lineTension:0, // 챠트의 유연성( 클수록 곡선에 가깝게 표시됨)
                 fill:false,  // 선챠트의 경우 하단 부분에 색상을 채울지 여부                  
-                data: [44,0,55,0]  // 해당 데이터셋의 데이터 리스트
+                data: [${vo.cash_sales},${vo.card_sales},0,0,0,0]  // 해당 데이터셋의 데이터 리스트
             }, {
                 label: '대여및발주(적자)', 
                 pointRadius: 5,
@@ -44,7 +71,7 @@
                 borderWidth: 1,
                 lineTension:0, 
                 fill:false,                   
-                data: [0,31,0,24] // 해당 데이터셋의 데이터 리스트
+                data: [0,0,${vo.repair_fee},${vo.tuning_fee},${vo.order_fee},${vo.maintain_fee}] // 해당 데이터셋의 데이터 리스트
             }]
  
         };
@@ -68,9 +95,9 @@
     </script>
     <tbody>
     <tr style="right">
-    	<th><h2>총 흑자 : + 100,000 원</h2></th>
-    	<th><h2>총 적자 :  - 80,000원</h2></th>
-    	<th><h2>총 합 : 20,000원</h2></th>
+    	<th><h2>총 흑자 : + ${vo.cash_sales+vo.card_sales} 원</h2></th>
+    	<th><h2>총 적자 :  - ${vo.repair_fee + vo.tuning_fee + vo.order_fee + vo.maintain_fee}원</h2></th>
+    	<th><h2>총 합 : ${vo.cash_sales+vo.card_sales - (vo.repair_fee + vo.tuning_fee + vo.order_fee + vo.maintain_fee)}원</h2></th>
     </tr>
     </tbody>
 </div>
