@@ -67,10 +67,10 @@
 		</form>
 	</div>
 	
-	<div class="sub-view-bottom">
-		<input type="button" value="수정등록" onclick="send()" class="btn-list">
-		<input type="button" value="수정취소" onclick="avent()" class="btn-list">
-		<a href="/Admin/stock/Stock_list.do?page=${page}" class="btn-list">재고 목록</a>&nbsp;&nbsp;
+	<div class="sub-view-bottom" align="center">
+		<a href="javascript:send();"><input type="button" value="수정등록" class="btn-list"></a>&nbsp;&nbsp;
+		<a href="javascript:avent();"></a><input type="button" value="수정취소" onclick="avent()" class="btn-list">&nbsp;&nbsp;
+		<a href="/Admin/stock/Stock_list.do?page=${page}"><input type="button" value="재고 목록"></a>&nbsp;&nbsp;
 	</div>
 		
 </div>

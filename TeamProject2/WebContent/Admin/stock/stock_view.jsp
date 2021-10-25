@@ -29,12 +29,19 @@
 		%>
 		가격 : <%=price%>
 		<%} %>
+		<br>
+		<c:if test="${!empty vo.resive_state}">
+		 특이 사항 : ${vo.resive_state}
+		</c:if>
+		<c:if test="${empty vo.resive_state}">
+		특이 사항 : 없음
+		</c:if>
 	</div>
 	
 	<div class="sub-view-bottom">
 		<a href="/Admin/stock/stock_modify.do?page=${page}&order_code=${vo.order_code}" class="btn-modify">수정</a>&nbsp;&nbsp;
 		<a href="javascript:void(0)" class="btn-delete" onclick="avent();">삭제</a>&nbsp;&nbsp;
-		<a href="qa.do" class="btn-list">목록</a>&nbsp;&nbsp;
+		<a href="/Admin/stock/Stock_list.do?page=${page}" class="btn-list">목록</a>&nbsp;&nbsp;
 	</div>
 		
 </div>
@@ -43,6 +50,8 @@ function avent(){
 	if(confirm("삭제하시겠습니까?") == true) {
 		location.href="/Admin/stock/stock_delete.do?page=${page}&order_code=${vo.order_code}";
 	}else {
+		alert("삭제취소합니다.");
+		location.href="/Admin/stock/stock_modify.do?page=${page}&order_code=${vo.order_code}";
 		return;
 	}
 }
