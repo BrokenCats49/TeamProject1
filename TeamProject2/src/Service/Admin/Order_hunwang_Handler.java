@@ -7,17 +7,15 @@ import javax.servlet.http.HttpServletResponse;
 
 import Model.Admin.Order.OrderDAO;
 import Model.Admin.Order.OrderVO;
-import Model.Admin.Stock.StockDAO;
-import Model.Admin.Stock.StockVO;
 import Service.CommandHandler;
-import util.PageIndex;
+import Utility.PageIndex;
 
-public class Oder_Resive_Handler implements CommandHandler {
+public class Order_hunwang_Handler implements CommandHandler {
+
 	@Override
 	public String requestPro(HttpServletRequest request, HttpServletResponse response) throws Throwable {
 		request.setCharacterEncoding("utf-8");
 		OrderDAO dao = OrderDAO.getInstance();
-		StockDAO dao1 = StockDAO.getInstance();
 		String s_query = "", addtag = "", query = "", key = "";
 
 		int totcount = 0; // 게시글 총수
@@ -59,12 +57,10 @@ public class Oder_Resive_Handler implements CommandHandler {
 		}
 		String pageSkip = "";
 		if (key.equals("")) {
-			pageSkip = PageIndex.pageList(nowpage, totpage, "/Admin/stock/resive.do", addtag);
+			pageSkip = PageIndex.pageList(nowpage, totpage, "order_hunwang.do", addtag);
 		} else {
-			pageSkip = PageIndex.pageListHan(nowpage, totpage, "/Admin/stock/resive.do", query, key);
+			pageSkip = PageIndex.pageListHan(nowpage, totpage, "order_hunwang.do", query, key);
 		}
-		List<StockVO> rlist = dao1.Stock_list();
-		
 		request.setAttribute("totcount", totcount);
 		request.setAttribute("list", list);
 		request.setAttribute("listcount", listcount);
@@ -73,9 +69,8 @@ public class Oder_Resive_Handler implements CommandHandler {
 		request.setAttribute("pageSkip", pageSkip);
 		request.setAttribute("search", query);
 		request.setAttribute("key", key);
-		request.setAttribute("rlist", rlist);
-		
-		return "/Admin/stock/oder_recive.jsp";
+
+		return "/Admin/order/order_hunwang.jsp";
 	}
-	
+
 }
