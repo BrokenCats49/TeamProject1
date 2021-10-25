@@ -1,32 +1,43 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-
-<%@ include file="../header.jsp"%>
-
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ include file="/include/header.jsp"%>
+<c:if test="${row==1}">
+	<script>
+		alert("수정 하였습니다.");
+		location.href="/gallery/gallery_view.do?page=${page}&idx=${idx}";
+	</script>
+</c:if>
+<c:if test="${row==0}">
+	<script>
+		alert("수정이 실패하였습니다.");
+		location.href="/gallery/gallery_modify.do?page=${page}&idx=${idx}";
+	</script>
+</c:if>
 <div class="contain">
 	<div class="sub-topcontent">
-		<h2 class="sub-view-title">갤러리 제목 출력</h2>
-		<p class="sub-view-wd">글쓴이 | 2019-06-11</p>
+		<h2 class="sub-view-title">${gvo.subject}</h2>
+		<p class="sub-view-wd">${gvo.name} | ${gvo.regdate.substring(0,10)}</p>
 	</div>
 	<div class="sub-view-contnet">
-		<p>글쓴내용이 출력되는 부분입니다</p>
-		<p>웹문서를 만드는 언어는 html5언어입니다<br>
-		멍텅구리 언어라 오류가 나와도 오류무시하고 출력을 시켜요</p>
-		<p></p>
-		<img src="../images/jsl.jpg" alt="">
+		<p>${gvo.contents}</p><br>
+		<p><img src="/gallery/upload/${gvo.filename}" width="150px;" height="500px;"></p>
 	</div>
 	
 	<div class="sub-view-bottom">
-		<a href="gallerywrite.do" class="btn-modify">수정</a>&nbsp;&nbsp;
+<c:if test="${!empty mvo}">
+		<a href="/gallery/gallery_modify.do?page=${page}&idx=${idx}" class="btn-modify">수정</a>&nbsp;&nbsp;
 		<a href="javascript:void(0)" class="btn-delete" onclick="avent();">삭제</a>&nbsp;&nbsp;
-		<a href="gallery.do" class="btn-list">목록</a>&nbsp;&nbsp;
+</c:if>		
+		<a href="/gallery/gallery_list.do?page=${page}" class="btn-list">목록</a>&nbsp;&nbsp;
 	</div>
 		
 </div>
 <script>
 function avent(){
 	if(confirm("후회안해? 삭제?") == true) {
-		location.href="gallery-delete.jsp";
+		var url = "/gallery/gallery_delete.do?idx=${idx}&page=${page}";
+		window.open(url,"","width=300 height=200");
 	}else {
 		return;
 	}
@@ -34,7 +45,7 @@ function avent(){
 </script>
 
 
-<%@ include file="../footer.jsp"%>
+<%@ include file="/include/footer.jsp"%>
 
 
 

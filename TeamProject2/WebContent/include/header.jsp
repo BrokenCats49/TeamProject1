@@ -1,10 +1,11 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>   
 <!DOCTYPE html>
 <html>
 <head>
 	<meta charset="UTF-8">
-	<title>관리자 페이지</title>
+	<title>BROKEN CAT</title>
 	<link href="/css/font-awesome.min.css" rel="stylesheet">
 	<link rel="stylesheet" href="https://cdn.jsdelivr.net/bxslider/4.2.12/jquery.bxslider.css">
 	<link href="/css/common.css" rel="stylesheet">
@@ -42,63 +43,36 @@
 		<header>
 			<div class="topnav">
 				<ul>
-					<li><a href="/member/login.jsp">로그인</a></li>
-					<li><a href="/member/member.jsp">회원가입</a></li>
-					<li><a href="javascript:void(0)" class="sitemap">사이트맵</a></li>
+			<c:if test="${empty uvo}">	
+					<li><a href="/member/member_login.do">로그인</a></li>
+					<li><a href="/member/member_insert.do">회원가입</a></li>
+					
+			</c:if>
+			<c:if test="${!empty uvo}">
+					<li><h3>${uvo.userid}/${uvo.name}</h3></li>
+					<li><a href="/member/member_logout.do">로그아웃</a></li>
+					<li><a href="/member/member_modify.do">회원수정</a></li>
+					<li><a href="/member/member_cash.do">카드충전</a></li>
+			</c:if>		
 				</ul>
 			</div>
 			<div class="navigation">
-				<h1 class="logo"><a href="/AdminLogin/index.jsp">Broken Cat</a></h1>
+				<h1 class="logo"><a href="/index.do">BROKEN CAT</a></h1>
 				<div class="nav">
 					<nav>
 						<ul class="navi">
-							<li><a href="#">게시판 관리</a>
-								<ul class="navi2">
-									<li><a href="#">자유게시판 관리</a></li>
-									<li><a href="#">공지게시판 관리</a></li>
-									<li><a href="#">갤러리게시판 관리</a></li>
-									<li><a href="#">회원게시판 관리</a></li>
-									<li><a href="#">공략게시판 관리</a></li>
-								</ul>
+							<li><a href="/about/about.jsp">역사</a>
+						
 							</li>
-							<li><a href="#">관리</a>
-								<ul class="navi2">
-									<li><a href="#">기기 관리</a></li>
-									<li><a href="#">게임 관리</a></li>
-									<li><a href="#">카드수량관리</a></li>
-									<li><a href="#">관리</a></li>
-								</ul>
+							<li><a href="/gallery/gallery_list.do">유저자랑</a>
+
 							</li>
-							<li><a href="/Admin/order/order_list.jsp">발주현황</a>
-								<ul class="navi2">
-									<li><a href="/Admin/order/order_lever.do">발주등록-레버</a></li>
-									<li><a href="/Admin/order/order_button_ac.do">발주등록-아케이드버튼</a></li>
-									<li><a href="/Admin/order/order_button_rg.do">발주등록-리듬게임버튼</a></li>
-									<li><a href="/Admin/order/order_parts.do">발주등록-부품</a></li>
-									
-								</ul>
+							<li><a href="/portfolio/pds_list.do">공략공유</a>
 							</li>
-							<li><a href="/Admin/stock/stock_list.jsp">재고관리</a>
-								<ul class="navi2">
-									<li><a href="/Admin/recive/recive_write.jsp">입고등록</a></li>
-									<li><a href="/Admin/recive/recive_list.jsp">입고현황</a></li>
-									<li><a href="/Admin/stock/stock_list.jsp">재고관리</a></li>
-								</ul>
+							<li><a href="/qa/qa_list.do">대여신청</a>
 							</li>
-							<li><a href="/Admin/acount/day_graph.jsp">일일정산</a>
-								<ul class="navi2">
-									<li><a href="/Admin/acount/day_acount_ready.do">준비금등록</a></li>
-									<li><a href="/Admin/acount/day_acount_game.do">게임매출등록</a></li>
-									<li><a href="/Admin/acount/day_acount_shop.do">가게매출등록</a></li>
-									<li><a href="/Admin/acount/day_acount_repair.do">수리비용등록</a></li>
-									<li><a href="/Admin/acount/day_acount_tuning.do">튜닝비용등록</a></li>
-									<li><a href="/Admin/acount/day_acount_total.do">일일정산</a></li>
-									<li><a href="/Admin/acount/day_graph.do">일 통계</a></li>
-									<li><a href="/Admin/acount/month_graph.jsp">월 통계</a></li>
-									<li><a href="/Admin/acount/year_graph.jsp">연 통계</a></li>
-								</ul>
-							</li>
-							<li><a href="/Admin/admin_list.jsp">회원관리</a></li>
+							<li><a href="/notice/notice_list.do">공지사항</a></li>
+							<li><a href="/board/board_list.do">자유게시판</a></li>
 						</ul>
 					</nav>
 				</div>
@@ -108,15 +82,15 @@
 	
 	<div class="line"></div>
 	
-	<div class="sitewrap">
-		<span class="fa fa-close" id="close" style="cursor:pointer"></span>
-		<div class="inner">
-			<span class="map"><a href="#">게시판 관리</a></span>
-			<span class="map"><a href="/Admin/stock/stock_list.jsp">재고 관리</a></span>
-			<span class="map"><a href="/Admin/order/order.jsp">발주 관리</a></span>
-			<span class="map"><a href="/Admin/recive/recive_list.jsp">입고 관리</a></span>
-			<span class="map"><a href="/Admin/acount/day_graph.jsp">매출 시스템</a></span>
-			<span class="map"><a href="/Admin/admin_list.jsp">회원 관리</a></span>
+	<div class="sitewrap" >
+		<span class="fa fa-close" id="close" ></span>
+		<div class="inner" >
+			<span class="map"><a href="about/about.jsp" style=color:#ffffff>#</a></span>
+			<span class="map" ><a href="/gallery/gallery_list.do" style=color:#ffffff>#</a></span>
+			<span class="map" ><a href="/portfolio/pds_list.do" style=color:#ffffff>#</a></span>
+			<span class="map"><a href="/qa/qa_list.do" style=color:#ffffff>#</a></span>
+			<span class="map"><a href="/notice/notice_list.do" style=color:#ffffff>#</a></span>
+			<span class="map"><a href="/board/board_list.do" style=color:#ffffff>#</a></span>
 		</div>
 	</div>
 	
