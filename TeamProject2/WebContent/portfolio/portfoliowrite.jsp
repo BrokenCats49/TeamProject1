@@ -1,17 +1,19 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-
-<%@ include file="../header.jsp"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ include file="/include/header.jsp"%>
 
 <div class="contain">
 	<div class="sub-topcontent">
-		<h2 class="sub-title">장수하늘소 포트폴리오</h2>
+		<h2 class="sub-title">공략공유 게시판</h2>
 	</div>
 	
 	<div class="write-form">
-	<form name="my" method="post" action="portfolioinsert.do" enctype="multipart/form-data" onsubmit="return formcheck();">
+	<form name="pds" method="post" action="/portfolio/pds_write_pro.do" enctype="multipart/form-data" onsubmit="return formcheck();">
+		<input type="hidden" name="page" value="${page}">
+		<input type="hidden" name="userid" value="${mvo.userid}">
 		<table>
-			<caption class="readonly">포트폴리오 입력폼</caption>			
+			<caption class="readonly">게시판 입력폼</caption>			
 			<colgroup>
 				<col class="w20">
 				<col class="w80">
@@ -19,29 +21,29 @@
 			<tbody>
 			
 					<tr>
-						<th><label for="title">제목</label></th>
-						<td><input type="text" name="title" id="title"></td>
+						<th><label for="subject">제목</label></th>
+						<td><input type="text" name="subject" id="subject"></td>
 					</tr>
 					<tr>
-						<th><label for="content">내용</th>
-						<td><textarea name="content" id="content" title="내용을 입력하세요"></textarea></td>
+						<th><label for="contents">내용</th>
+						<td><textarea name="contents" id="contents" title="내용을 입력하세요"></textarea></td>
 					</tr>
 					<tr>
-						<th><label for="writer">작성자</label></th>
-						<td><input type="text" name="writer" id="writer"></td>
+						<th><label for="name">작성자</label></th>
+						<td><input type="text" name="name" id="name" value="${mvo.name}"></td>
 					</tr>
 					<tr>
-						<th><label for="appfile">첨부</label></th>
-						<td><input type="file" name="appfile" id="appfile"></td>
+						<th><label for="filename">첨부</label></th>
+						<td><input type="file" name="filename" id="filename"></td>
 					</tr>
 					<tr>
 						<th><label for="pass">비밀번호</label></th>
-						<td><input type="password" name="pass" id="pass"></td>
+						<td><input type="password" name="pass" id="pass" value="${mvo.passwd}"></td>
 					</tr>
 					<tr>
 						<td colspan="2">
 							<input type="submit" value="전송" class="btn-write">
-							<input type="button" value="목록"  class="btn-reset" onclick="javascript:location.href='portfolio.do'">
+							<a href="/portfolio/pds_list.do?page${page}"><input type="button" value="목록"  class="btn-reset"></a>
 						</td>
 					</tr>
 				
@@ -67,14 +69,14 @@
 	    var spe = pw.search(/[`~!@@#$%^&*|₩₩₩'₩";:₩/?]/gi);
 	    
         
-		if(my.title.value=="") {
+		if(pds.subject.value=="") {
 			alert("제목입력하세요");
-			my.title.focus();
+			pds.subject.focus();
 			return false;
 		}
-		if(my.content.value=="") {
+		if(pds.contents.value=="") {
 			alert("내용입력하세요");
-			my.content.focus();
+			pds.contents.focus();
 			return false;
 		}
 		
@@ -101,7 +103,7 @@
 	
 </script>
 
-<%@ include file="../footer.jsp"%>
+<%@ include file="/include/footer.jsp"%>
 
 
 

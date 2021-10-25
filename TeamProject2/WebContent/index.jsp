@@ -1,54 +1,72 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-    
-<%@ include file="header.jsp" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>   
+<%@ include file="/include/header.jsp" %>
 	
 	<div class="slider">
-	    <div><img src="images/a1.jpg" alt="" title="배움의 즐거움이 있는곳"></div>
-	    <div><img src="images/a2.jpg" alt="" title="나에게 주는 만큼"></div>
-	    <div><img src="images/a3.jpg" alt="" title="나에게도 많은 축복이 있습니다"></div>
+	    <div><img src="/images/1.jpg" alt="" title="신개념 오락실"></div>
+	    <div><img src="/images/2.jpg" alt="" title="깔끔한 오락실"></div>
+	    <div><img src="/images/3.jpg" alt="" title="누구나 다함께"></div>
+	    <div><img src="/images/4.jpg" alt="" title="플레이 해보세요"></div>
   	</div>
 
 	
 	<div class="indexgallery">
 			<div class="indextitle">
-				<h2>장수하늘소<br>갤러리</h2>
-				<span><a href="/gallery/gallery.jsp">MORE</a></span>
+				<h2>유저 자랑게시판<br>갤러리</h2>
+				<span><a href="/gallery/gallery_list.do">MORE</a></span>
 			</div>
+<c:if test="${!empty list}">
+	<c:forEach var="i" items="${list}" begin="0" end="2" step="1">
 			<ul>
-				<li><a href=""><img src="images/shop1.jpg"></a></li>
-				<li><a href=""><img src="images/shop2.jpg"></a></li>
-				<li><a href=""><img src="images/shop3.jpg"></a></li>
-			</ul>
+				<li><a href="/gallery/gallery_list.do"><img src="gallery/upload/${i.filename}"></a></li>
+			</ul>			
+	</c:forEach>
+</c:if>	
+<c:if test="${empty list}">
+			<ul>
+				<li><h3>사진이 없네요.</h3></li>
+			</ul>			
+</c:if>			
 	</div>
-	
-	
 	<div class="bbs_wrap">
 		<div class="bbs_left">
 			<h2 class="title">공지시항</h2>
+<c:if test="${!empty list3}">
+		<c:forEach var="n" items="${list3}" begin="0" end="4" step="1">
 			<ul>
-				<li><a href="#">화면구현은 어떻게 하는가</a></li>
-				<li><a href="#">홈페이지 혼자 만들어보기</a></li>
-				<li><a href="#">지구여행 얼마 남았는가</a> </li>
-				<li><a href="#">일본취업 나도 해보자</a></li>
-				<li><a href="#">하다보면 할수 있다</a></li>
-			</ul>
-			<a href="notice.do"><span class="fa fa-plus plus"></span></a>
+				<li><a href="/notice/notice_view.do?idx=${n.idx}&page=${page}">${n.subject}</a></li>
+			</ul>	
+			<a href="/notice/notice_list.do"><span class="fa fa-plus plus"></span></a>		
+	</c:forEach>
+</c:if>
+<c:if test="${empty list3}">
+			<ul>
+				<li><h3>글이 없네요.</h3></li>
+			</ul>			
+</c:if>	
 		</div>
 		<div class="bbs_right">
-			<h2 class="title">질문답변</h2>
+			<h2 class="title">기기대여신청</h2>
+<c:if test="${!empty list2}">
+		<c:forEach var="q" items="${list2}" begin="0" end="4" step="1">
 			<ul>
-				<li><a href="#">이클립스 다운로드</a></li>
-				<li><a href="#">JSP강좌 PDF</a></li>
-				<li><a href="#">JAVA 환경설정 파일 설명서</a> </li>
-				<li><a href="#">동영상 강좌 자료실</a></li>
-				<li><a href="#">스프링 강좌 자료 다운</a></li>
-			</ul>
-			<a href="qa.do"><span class="fa fa-plus plus"></span></a>
+				<li><a href="/qa/qa_view.do?idx=${q.idx}&page=${page}">${q.subject}</a></li>
+			</ul>	
+			<a href="/qa/qa_list.do"><span class="fa fa-plus plus"></span></a>		
+	</c:forEach>
+</c:if>
+
+<c:if test="${empty list2}">
+			<ul>
+				<li><h3>글이 없네요.</h3></li>
+			</ul>			
+</c:if>					
+			
 		</div>
 	</div>
 	
-<%@ include file="footer.jsp" %>
+<%@ include file="/include/footer.jsp" %>
 
 
 

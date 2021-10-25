@@ -1,144 +1,103 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 
-<%@ include file="../header.jsp"%>
-
+<%@ include file="/include/header.jsp"%>
+<c:if test="${row==0}">
+	<script>
+		alert("죄송합니다. \n등록에 실패하였습니다.");
+		history.back();
+	</script>
+</c:if>
+<c:if test="${row==1}">
+	<script>
+		alert("글이 등록처리 되었습니다.");
+		location.href="/portfolio/pds_list.do";
+	</script>
+</c:if>
 <div class="contain">
 	<div class="sub-topcontent">
-		<h2 class="sub-title">장수하늘소 포트폴리오</h2>
+		<h2 class="sub-title">공략공유 게시판</h2>
 		<div class="sub-search">
-			<form name="my" method="post" action="portfoliosearch.do" onsubmit="return check()">
-				<select name="sel" class="sel">
-					<option value="title">제목</option>
-					<option value="content">내용</option>
+			<form name="my" method="post" action="/portfolio/pds_list.do" onsubmit="return check()">
+				<select name="search" class="sel">
+					<option value="subject" <c:if test="${search=='subject'}"> selected </c:if>>제목</option>
+					<option value="name" <c:if test="${search=='name'}"> selected </c:if>>작성자</option>
+					<option value="contents" <c:if test="${search=='contents'}"> selected </c:if>>내용</option>
 				</select>
-				<input type="text" name="cont" class="text">
+				<input type="text" name="key" value="${key}" class="text">
 				<input type="submit" value="검색" class="btn">
 			</form>
 		</div>
 	</div>
 	
 		<ul class="sub-port-content">
+<c:if test="${!empty list2}">
+		<c:forEach var="port" items="${list2}">			
 			<li>
-				<span class="date"><em>12</em>2019-06</span>
+				<span class="date"><em>${port.regdate.substring(5,7)}</em>${port.regdate.substring(8,10)}</span>
 				<div class="text-wrap">
 					<div class="img-wrap">
-						<img src="/images/jsl.jpg" alt="모집사진">
+						<img src="/images/easy.jpg" alt="등록자료">
 					</div>
 					<div class="text-body">
-						<span>No.98</span> | <span class=""><i class="fa fa-eye"></i> 210</span>
+						<span>${port.idx}</span> | <span class=""><i class="fa fa-eye"></i> ${port.readcnt}</span>
+						<a href="/portfolio/pds_view.do?page=${page}&idx=${port.idx}">
+							<p class="title">${port.subject}</p>
+							<p class="text-cont">${port.contents}</p>
+						</a>
+					</div>
+				</div>
+			</li>
+	</c:forEach>
+</c:if>
+<c:if test="${empty list2}">		
+			<li>
+				<span class="date"><em>00</em>0000-00</span>
+				<div class="text-wrap">
+					<div class="img-wrap">
+						<img src="/images/noting.jpg" alt="자료가 없다">
+					</div>
+					<div class="text-body">
+						<span>No.00</span> | <span class=""><i class="fa fa-eye"></i>00</span>
 						<a href="portfolioview.jsp">
-							<p class="title">일본취업가자아</p>
-							<p class="text-cont">정보처리기사 자격증 취득하고, 
-							일본어도 배우고, 기술습득하고 돈벌러 나는 일본간다<br>
-							좋겠당~~^^<br>
-							부럽다~~~~~gooooooooood man</p>
+							<p class="title">아무것도</p>
+							<p class="text-cont">아무것도 없다. 
+							뭐라도 올려봐라<br>
+							엉?<br></p>
 						</a>
 					</div>
 				</div>
 			</li>
-			<li>
-				<span class="date"><em>12</em>2019-06</span>
-				<div class="text-wrap">
-					<div class="img-wrap">
-						<img src="/images/jsl.jpg" alt="모집사진">
-					</div>
-					<div class="text-body">
-						<span>No.98</span> | <span class=""><i class="fa fa-eye"></i> 210</span>
-						<a href="portfolioview.do">
-							<p class="title">일본취업가자아</p>
-							<p class="text-cont">정보처리기사 자격증 취득하고, 
-							일본어도 배우고, 기술습득하고 돈벌러 나는 일본간다<br>
-							좋겠당~~^^<br>
-							부럽다~~~~~gooooooooood man</p>
-						</a>
-					</div>
-				</div>
-			</li>
-			<li>
-				<span class="date"><em>12</em>2019-06</span>
-				<div class="text-wrap">
-					<div class="img-wrap">
-						<img src="/images/jsl.jpg" alt="모집사진">
-					</div>
-					<div class="text-body">
-						<span>No.98</span> | <span class=""><i class="fa fa-eye"></i> 210</span>
-						<a href="portfolioview.do">
-							<p class="title">일본취업가자아</p>
-							<p class="text-cont">정보처리기사 자격증 취득하고, 
-							일본어도 배우고, 기술습득하고 돈벌러 나는 일본간다<br>
-							좋겠당~~^^<br>
-							부럽다~~~~~gooooooooood man</p>
-						</a>
-					</div>
-				</div>
-			</li>
-			<li>
-				<span class="date"><em>12</em>2019-06</span>
-				<div class="text-wrap">
-					<div class="img-wrap">
-						<img src="/images/jsl.jpg" alt="모집사진">
-					</div>
-					<div class="text-body">
-						<span>No.98</span> | <span class=""><i class="fa fa-eye"></i> 210</span>
-						<a href="portfolioview.do">
-							<p class="title">일본취업가자아</p>
-							<p class="text-cont">정보처리기사 자격증 취득하고, 
-							일본어도 배우고, 기술습득하고 돈벌러 나는 일본간다<br>
-							좋겠당~~^^<br>
-							부럽다~~~~~gooooooooood man</p>
-						</a>
-					</div>
-				</div>
-			</li>
-			<li>
-				<span class="date"><em>12</em>2019-06</span>
-				<div class="text-wrap">
-					<div class="img-wrap">
-						<img src="/images/jsl.jpg" alt="모집사진">
-					</div>
-					<div class="text-body">
-						<span>No.98</span> | <span class=""><i class="fa fa-eye"></i> 210</span>
-						<a href="portfolioview.do">
-							<p class="title">일본취업가자아</p>
-							<p class="text-cont">정보처리기사 자격증 취득하고, 
-							일본어도 배우고, 기술습득하고 돈벌러 나는 일본간다<br>
-							좋겠당~~^^<br>
-							부럽다~~~~~gooooooooood man</p>
-						</a>
-					</div>
-				</div>
-			</li>
-			
+</c:if>			
 		</ul>
 		
 		<div class="paging">
 			<ul>
-				<li><a href="#">이전</a></li>
-				<li><a href="#">1</a></li>
-				<li><a href="#">2</a></li>
-				<li><a href="#">3</a></li>
-				<li><a href="#">4</a></li>
-				<li><a href="#">5</a></li>
-				<li><a href="#">다음</a></li>
+				<li>${pageskip}</li>
 			</ul>
-			<a href="portfoliowrite.do" class="btn-write">글쓰기</a>
 		</div>
+<c:if test="${!empty mvo}">	
+	<a href="/portfolio/pds_write.do?page=${page}" class="btn-write">글쓰기</a>
+</c:if>
+<c:if test="${empty mvo}">
+
+</c:if>
 
 </div>
 
 <script>
 	function check() {
-		if(my.cont.value=="") {
+		if(my.key.value=="") {
 			alert("검색단어입력하세요");
-			my.cont.focus;
+			my.key.focus;
 			return false;
 		}
 		return true;
 	}
 </script>
 
-<%@ include file="../footer.jsp"%>
+<%@ include file="/include/footer.jsp"%>
 
 
 

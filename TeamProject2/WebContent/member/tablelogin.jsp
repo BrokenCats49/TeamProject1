@@ -1,7 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 
-<%@ include file="../header.jsp"%>
+<%@ include file="/include/header.jsp"%>
 
 <div class="contain">
 	<div class="sub-topcontent">
@@ -56,7 +56,7 @@
 	}
 </script>
 
-<%@ include file="../footer.jsp"%>
+<%@ include file="/include/footer.jsp"%>
 
 
 
